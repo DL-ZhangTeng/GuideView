@@ -46,11 +46,11 @@ class GuideHelper private constructor(context: Context) {
         }
     }
 
-    fun show() {
+    fun show(delayMilliseconds: Long = 0) {
         if (mActivity != null) {
-            mView.build(mActivity)
+            mView.build(mActivity, delayMilliseconds)
         } else if (mFragment != null) {
-            mView.build(mFragment)
+            mView.build(mFragment, delayMilliseconds)
         }
     }
 
@@ -97,6 +97,15 @@ class GuideHelper private constructor(context: Context) {
         abstract fun onEmptyClicked(guide: GuideHelper): Boolean
 
         /**
+         * 长按蒙层非裁剪和信息区域回调，返回true，直接退出引导，返回false则不退出
+         *
+         * @return
+         */
+        fun onEmptyLongClicked(guide: GuideHelper): Boolean {
+            return false
+        }
+
+        /**
          * 引导镂空区域点击回调，如果镂空区域设置了事件透传，则不回调
          *
          * @param guide
@@ -105,12 +114,28 @@ class GuideHelper private constructor(context: Context) {
         abstract fun onClipClicked(guide: GuideHelper, view: GuidView, tag: String)
 
         /**
+         * 引导镂空区域长按回调，如果镂空区域设置了事件透传，则不回调
+         *
+         * @param guide
+         * @param tag
+         */
+        fun onClipLongClicked(guide: GuideHelper, view: GuidView, tag: String) {}
+
+        /**
          * 引导介绍区域点击回调
          *
          * @param guide
          * @param tag
          */
         abstract fun onIntroClicked(guide: GuideHelper, view: GuidView, tag: String)
+
+        /**
+         * 引导介绍区域长按回调
+         *
+         * @param guide
+         * @param tag
+         */
+        fun onIntroLongClicked(guide: GuideHelper, view: GuidView, tag: String) {}
     }
 
     enum class AlignY(var align: Int) {

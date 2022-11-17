@@ -82,7 +82,7 @@ class GuidView constructor(
         postInvalidate()
     }
 
-    fun build(activity: Activity?) {
+    fun build(activity: Activity?, delayMilliseconds: Long = 0) {
         val rootView = activity!!.window.decorView as FrameLayout
         val params = FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT,
@@ -99,10 +99,10 @@ class GuidView constructor(
                 mLayerList!![i].build(activity)
             }
         }
-        postInvalidate()
+        postInvalidateDelayed(delayMilliseconds)
     }
 
-    fun build(fragment: Fragment?) {
+    fun build(fragment: Fragment?, delayMilliseconds: Long = 0) {
         val rootView = fragment!!.requireActivity().window.decorView as FrameLayout
         val params = FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT,
@@ -119,7 +119,7 @@ class GuidView constructor(
                 mLayerList!![i].build(fragment)
             }
         }
-        postInvalidate()
+        postInvalidateDelayed(delayMilliseconds)
     }
 
     fun clearLayers() {
@@ -175,6 +175,10 @@ class GuidView constructor(
                         if (abs(x - mPressX) < mMinTouchSlop && abs(y - mPressY) < mMinTouchSlop) {
                             executeClick(mPressX, mPressY)
                         }
+                    } else {
+                        if (abs(x - mPressX) < mMinTouchSlop && abs(y - mPressY) < mMinTouchSlop) {
+                            executeLongClick(mPressX, mPressY)
+                        }
                     }
                 }
             }
@@ -211,6 +215,39 @@ class GuidView constructor(
         }
         if (isTouchIn && mClickListener != null) {
             val result = mClickListener!!.onEmptyClicked()
+            if (result) {
+                dismiss()
+            }
+        }
+    }
+
+    private fun executeLongClick(x: Float, y: Float) {
+        Log.i(
+            "Layer",
+            "mPressX:"
+                    + mPressX
+                    + "   mPressY:"
+                    + mPressY
+                    + "    mLastPressTime:"
+                    + mLastPressTime
+                    + "    mMinTouchSlop:"
+                    + mMinTouchSlop
+        )
+        if (mClickListener == null) {
+            return
+        }
+        for (i in mLayerList!!.indices) {
+            val item = mLayerList!![i]
+            if (item.isTouchInClip(x, y)) {
+                mClickListener!!.onClipLongClicked(item.tag)
+                return
+            } else if (item.isTouchInIntro(x, y)) {
+                mClickListener!!.onIntroLongClicked(item.tag)
+                return
+            }
+        }
+        if (isTouchIn && mClickListener != null) {
+            val result = mClickListener!!.onEmptyLongClicked()
             if (result) {
                 dismiss()
             }
@@ -257,6 +294,13 @@ class GuidView constructor(
         fun onEmptyClicked(): Boolean
 
         /**
+         * 长按蒙层非裁剪和信息区域回调，返回true，直接退出引导，返回false则不退出
+         *
+         * @return
+         */
+        fun onEmptyLongClicked(): Boolean
+
+        /**
          * 引导镂空区域点击回调，如果镂空区域设置了事件透传，则不回调
          *
          * @param tag
@@ -264,10 +308,24 @@ class GuidView constructor(
         fun onClipClicked(tag: String)
 
         /**
+         * 引导镂空区域长按回调，如果镂空区域设置了事件透传，则不回调
+         *
+         * @param tag
+         */
+        fun onClipLongClicked(tag: String)
+
+        /**
          * 引导介绍区域点击回调
          *
          * @param tag
          */
         fun onIntroClicked(tag: String)
+
+        /**
+         * 引导介绍区域长按回调
+         *
+         * @param tag
+         */
+        fun onIntroLongClicked(tag: String)
     }
 }

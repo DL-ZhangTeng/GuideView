@@ -64,9 +64,9 @@ class LayerHolder private constructor(
         return this
     }
 
-    fun show() {
+    fun show(delayMilliseconds: Long = 0) {
         and()
-        guideHelper.show()
+        guideHelper.show(delayMilliseconds)
     }
 
     private fun <T : BaseClip> buildDstTarget(clipPosition: T) {
@@ -88,12 +88,24 @@ class LayerHolder private constructor(
         } else false
     }
 
+    override fun onEmptyLongClicked(): Boolean {
+        return mListener?.onEmptyLongClicked(guideHelper) == true
+    }
+
     override fun onClipClicked(tag: String) {
         mListener?.onClipClicked(guideHelper, mView, tag)
     }
 
+    override fun onClipLongClicked(tag: String) {
+        mListener?.onClipLongClicked(guideHelper, mView, tag)
+    }
+
     override fun onIntroClicked(tag: String) {
         mListener?.onIntroClicked(guideHelper, mView, tag)
+    }
+
+    override fun onIntroLongClicked(tag: String) {
+        mListener?.onIntroLongClicked(guideHelper, mView, tag)
     }
 
     companion object {

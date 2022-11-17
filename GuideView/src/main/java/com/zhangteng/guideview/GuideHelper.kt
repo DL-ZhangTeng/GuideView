@@ -46,6 +46,14 @@ class GuideHelper private constructor(context: Context) {
         }
     }
 
+    fun show() {
+        if (mActivity != null) {
+            mView.build(mActivity)
+        } else if (mFragment != null) {
+            mView.build(mFragment)
+        }
+    }
+
     fun show(delayMilliseconds: Long = 0) {
         if (mActivity != null) {
             mView.build(mActivity, delayMilliseconds)
@@ -87,7 +95,7 @@ class GuideHelper private constructor(context: Context) {
         /**
          * 引导层销毁回调
          */
-        fun onDestroyed() {}
+        open fun onDestroyed() {}
 
         /**
          * 点击蒙层非裁剪和信息区域回调，返回true，直接退出引导，返回false则不退出
@@ -101,7 +109,7 @@ class GuideHelper private constructor(context: Context) {
          *
          * @return
          */
-        fun onEmptyLongClicked(guide: GuideHelper): Boolean {
+        open fun onEmptyLongClicked(guide: GuideHelper): Boolean {
             return false
         }
 
@@ -119,7 +127,7 @@ class GuideHelper private constructor(context: Context) {
          * @param guide
          * @param tag
          */
-        fun onClipLongClicked(guide: GuideHelper, view: GuidView, tag: String) {}
+        open fun onClipLongClicked(guide: GuideHelper, view: GuidView, tag: String) {}
 
         /**
          * 引导介绍区域点击回调
@@ -135,7 +143,7 @@ class GuideHelper private constructor(context: Context) {
          * @param guide
          * @param tag
          */
-        fun onIntroLongClicked(guide: GuideHelper, view: GuidView, tag: String) {}
+        open fun onIntroLongClicked(guide: GuideHelper, view: GuidView, tag: String) {}
     }
 
     enum class AlignY(var align: Int) {

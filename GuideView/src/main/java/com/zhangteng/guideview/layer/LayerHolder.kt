@@ -64,6 +64,11 @@ class LayerHolder private constructor(
         return this
     }
 
+    fun show() {
+        and()
+        guideHelper.show()
+    }
+
     fun show(delayMilliseconds: Long = 0) {
         and()
         guideHelper.show(delayMilliseconds)

@@ -64,11 +64,6 @@ class LayerHolder private constructor(
         return this
     }
 
-    fun show() {
-        and()
-        guideHelper.show()
-    }
-
     fun show(delayMilliseconds: Long = 0) {
         and()
         guideHelper.show(delayMilliseconds)
@@ -88,29 +83,27 @@ class LayerHolder private constructor(
     }
 
     override fun onEmptyClicked(): Boolean {
-        return if (mListener != null) {
-            mListener!!.onEmptyClicked(guideHelper)
-        } else false
+        return mListener?.onEmptyClicked(guideHelper) == true
     }
 
     override fun onEmptyLongClicked(): Boolean {
         return mListener?.onEmptyLongClicked(guideHelper) == true
     }
 
-    override fun onClipClicked(tag: String) {
-        mListener?.onClipClicked(guideHelper, mView, tag)
+    override fun onClipClicked(tag: String): Boolean {
+        return mListener?.onClipClicked(guideHelper, mView, tag) == true
     }
 
-    override fun onClipLongClicked(tag: String) {
-        mListener?.onClipLongClicked(guideHelper, mView, tag)
+    override fun onClipLongClicked(tag: String): Boolean {
+        return mListener?.onClipLongClicked(guideHelper, mView, tag) == true
     }
 
-    override fun onIntroClicked(tag: String) {
-        mListener?.onIntroClicked(guideHelper, mView, tag)
+    override fun onIntroClicked(tag: String): Boolean {
+        return mListener?.onIntroClicked(guideHelper, mView, tag) == true
     }
 
-    override fun onIntroLongClicked(tag: String) {
-        mListener?.onIntroLongClicked(guideHelper, mView, tag)
+    override fun onIntroLongClicked(tag: String): Boolean {
+        return mListener?.onIntroLongClicked(guideHelper, mView, tag) == true
     }
 
     companion object {

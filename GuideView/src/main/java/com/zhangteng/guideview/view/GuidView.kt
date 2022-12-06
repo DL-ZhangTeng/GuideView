@@ -206,10 +206,16 @@ class GuidView constructor(
         for (i in mLayerList!!.indices) {
             val item = mLayerList!![i]
             if (item.isTouchInClip(x, y)) {
-                mClickListener!!.onClipClicked(item.tag)
+                val result = mClickListener!!.onClipClicked(item.tag)
+                if (result) {
+                    dismiss()
+                }
                 return
             } else if (item.isTouchInIntro(x, y)) {
-                mClickListener!!.onIntroClicked(item.tag)
+                val result = mClickListener!!.onIntroClicked(item.tag)
+                if (result) {
+                    dismiss()
+                }
                 return
             }
         }
@@ -239,10 +245,16 @@ class GuidView constructor(
         for (i in mLayerList!!.indices) {
             val item = mLayerList!![i]
             if (item.isTouchInClip(x, y)) {
-                mClickListener!!.onClipLongClicked(item.tag)
+                val result = mClickListener!!.onClipLongClicked(item.tag)
+                if (result) {
+                    dismiss()
+                }
                 return
             } else if (item.isTouchInIntro(x, y)) {
-                mClickListener!!.onIntroLongClicked(item.tag)
+                val result = mClickListener!!.onIntroLongClicked(item.tag)
+                if (result) {
+                    dismiss()
+                }
                 return
             }
         }
@@ -305,27 +317,27 @@ class GuidView constructor(
          *
          * @param tag
          */
-        fun onClipClicked(tag: String)
+        fun onClipClicked(tag: String): Boolean
 
         /**
          * 引导镂空区域长按回调，如果镂空区域设置了事件透传，则不回调
          *
          * @param tag
          */
-        fun onClipLongClicked(tag: String)
+        fun onClipLongClicked(tag: String): Boolean
 
         /**
          * 引导介绍区域点击回调
          *
          * @param tag
          */
-        fun onIntroClicked(tag: String)
+        fun onIntroClicked(tag: String): Boolean
 
         /**
          * 引导介绍区域长按回调
          *
          * @param tag
          */
-        fun onIntroLongClicked(tag: String)
+        fun onIntroLongClicked(tag: String): Boolean
     }
 }

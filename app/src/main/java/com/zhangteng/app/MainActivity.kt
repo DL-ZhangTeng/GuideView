@@ -59,14 +59,24 @@ class MainActivity : AppCompatActivity() {
                     return true //返回true，引导消失，false不消失
                 }
 
-                override fun onClipClicked(guide: GuideHelper, view: GuidView, tag: String) {
+                override fun onClipClicked(
+                    guide: GuideHelper,
+                    view: GuidView,
+                    tag: String
+                ): Boolean {
                     //由于设置了setEventPassThrough 为true，所以这里这个方法不会回调
+                    return false
                 }
 
-                override fun onIntroClicked(guide: GuideHelper, view: GuidView, tag: String) {
+                override fun onIntroClicked(
+                    guide: GuideHelper,
+                    view: GuidView,
+                    tag: String
+                ): Boolean {
                     //点击文字区域
                     Toast.makeText(applicationContext, "点击了介绍区域", Toast.LENGTH_SHORT)
                         .show()
+                    return false
                 }
             })
             .and()
@@ -90,14 +100,24 @@ class MainActivity : AppCompatActivity() {
                     return true //返回true，引导消失，false不消失
                 }
 
-                override fun onClipClicked(guide: GuideHelper, view: GuidView, tag: String) {
+                override fun onClipClicked(
+                    guide: GuideHelper,
+                    view: GuidView,
+                    tag: String
+                ): Boolean {
                     //由于设置了setEventPassThrough 为true，所以这里这个方法不会回调
+                    return false
                 }
 
-                override fun onIntroClicked(guide: GuideHelper, view: GuidView, tag: String) {
+                override fun onIntroClicked(
+                    guide: GuideHelper,
+                    view: GuidView,
+                    tag: String
+                ): Boolean {
                     //点击文字区域
                     Toast.makeText(applicationContext, "点击了介绍区域", Toast.LENGTH_SHORT)
                         .show()
+                    return false
                 }
             })
             .show()

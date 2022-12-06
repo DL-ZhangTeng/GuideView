@@ -8,13 +8,9 @@ import com.zhangteng.guideview.layer.LayerHolder
 import com.zhangteng.guideview.view.GuidView
 
 class GuideHelper private constructor(context: Context) {
-    private val mView: GuidView
+    private val mView by lazy { GuidView(context) }
     private var mActivity: Activity? = null
     private var mFragment: Fragment? = null
-
-    init {
-        mView = GuidView(context)
-    }
 
     /**
      * layer层基础颜色
@@ -43,14 +39,6 @@ class GuideHelper private constructor(context: Context) {
             LayerHolder.newCreator(mView, this, createTag())
         } else {
             LayerHolder.newCreator(mView, this, tag)
-        }
-    }
-
-    fun show() {
-        if (mActivity != null) {
-            mView.build(mActivity)
-        } else if (mFragment != null) {
-            mView.build(mFragment)
         }
     }
 
@@ -114,36 +102,40 @@ class GuideHelper private constructor(context: Context) {
         }
 
         /**
-         * 引导镂空区域点击回调，如果镂空区域设置了事件透传，则不回调
+         * 引导镂空区域点击回调，如果镂空区域设置了事件透传，则不回调，返回true，直接退出引导，返回false则不退出
          *
          * @param guide
          * @param tag
          */
-        abstract fun onClipClicked(guide: GuideHelper, view: GuidView, tag: String)
+        abstract fun onClipClicked(guide: GuideHelper, view: GuidView, tag: String): Boolean
 
         /**
-         * 引导镂空区域长按回调，如果镂空区域设置了事件透传，则不回调
+         * 引导镂空区域长按回调，如果镂空区域设置了事件透传，则不回调，返回true，直接退出引导，返回false则不退出
          *
          * @param guide
          * @param tag
          */
-        open fun onClipLongClicked(guide: GuideHelper, view: GuidView, tag: String) {}
+        open fun onClipLongClicked(guide: GuideHelper, view: GuidView, tag: String): Boolean {
+            return false
+        }
 
         /**
-         * 引导介绍区域点击回调
+         * 引导介绍区域点击回调，返回true，直接退出引导，返回false则不退出
          *
          * @param guide
          * @param tag
          */
-        abstract fun onIntroClicked(guide: GuideHelper, view: GuidView, tag: String)
+        abstract fun onIntroClicked(guide: GuideHelper, view: GuidView, tag: String): Boolean
 
         /**
-         * 引导介绍区域长按回调
+         * 引导介绍区域长按回调，返回true，直接退出引导，返回false则不退出
          *
          * @param guide
          * @param tag
          */
-        open fun onIntroLongClicked(guide: GuideHelper, view: GuidView, tag: String) {}
+        open fun onIntroLongClicked(guide: GuideHelper, view: GuidView, tag: String): Boolean {
+            return false
+        }
     }
 
     enum class AlignY(var align: Int) {

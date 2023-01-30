@@ -148,11 +148,8 @@ class GuidView constructor(
     }
 
     fun dismiss() {
-        val parentView = parent as ViewGroup
-        parentView.removeView(this)
-        if (mClickListener != null) {
-            mClickListener!!.onDestroyed()
-        }
+        (parent as ViewGroup?)?.removeView(this)
+        mClickListener?.onDestroyed()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -166,6 +163,7 @@ class GuidView constructor(
                 val result = checkIsLayerIn(mPressX, mPressY)
                 isTouchIn = !(result[0] && result[1])
             }
+
             MotionEvent.ACTION_MOVE -> return true
             MotionEvent.ACTION_UP -> {
                 val x = event.x
@@ -182,6 +180,7 @@ class GuidView constructor(
                     }
                 }
             }
+
             MotionEvent.ACTION_CANCEL -> isTouchIn = false
             else -> {}
         }
